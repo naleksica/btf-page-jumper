@@ -1,27 +1,32 @@
-/* Base container */
+/* === Base container === */
 #btf-page-jumper {
   position: fixed;
   top: 80px;
   right: 24px;
-  z-index: 999999;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  z-index: 2147483647;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Helvetica Neue, Arial, Noto Sans;
   background: rgba(22, 22, 26, 0.92);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   user-select: none;
+  resize: both;
+  overflow: hidden;
+  min-width: 280px;
+  max-width: 640px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
 }
 
-
-/* Header bar for dragging */
+/* Header bar (draggable) */
 #btf-page-jumper .btf-header {
   cursor: move;
   padding: 8px 12px;
   font-weight: 600;
-  letter-spacing: 0.2px;
-  background: rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   display: flex;
@@ -29,59 +34,210 @@
   justify-content: space-between;
 }
 
-
 #btf-page-jumper .btf-close {
   cursor: pointer;
   font-weight: 700;
   opacity: 0.8;
 }
-#btf-page-jumper.minimized {
-  width: auto;
-  min-width: 120px;
-}
-
-#btf-page-jumper .btf-header {
-  justify-content: space-between;
-}
 #btf-page-jumper .btf-close:hover { opacity: 1; }
 
-
-/* Controls */
+/* === Body === */
 #btf-page-jumper .btf-body {
-  padding: 10px 12px 12px;
-  display: grid;
-  grid-template-columns: repeat(6, auto);
-  grid-gap: 6px;
-  align-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 14px 14px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transform-origin: top;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 1;
+  transform: scaleY(1);
 }
 
+#btf-page-jumper .btf-body.hidden {
+  transform: scaleY(0);
+  opacity: 0;
+  pointer-events: none;
+}
 
+/* Top control row: - buttons | input | + buttons */
+#btf-control-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+#btf-control-left,
+#btf-control-right {
+  display: flex;
+  gap: 6px;
+}
+
+/* Middle row: Prev / Go / Next */
+#btf-control-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Buttons */
 #btf-page-jumper button {
   background: #2c2f36;
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  padding: 6px 8px;
-  font-size: 12px;
-  line-height: 1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
   cursor: pointer;
-  transition: transform 0.05s ease, background 0.2s ease;
+  transition: transform 0.05s ease, background 0.2s ease, border-color 0.2s ease;
 }
-#btf-page-jumper button:hover { background: #3a3e47; }
+#btf-page-jumper button:hover {
+  background: #3a3e47;
+  border-color: rgba(255, 255, 255, 0.25);
+}
 #btf-page-jumper button:active { transform: translateY(1px); }
 
-
+/* Number input */
 #btf-page-jumper input[type="number"] {
-  width: 84px;
+  width: 90px;
   padding: 6px 8px;
   background: #1f2228;
   color: #fff;
   border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px;
-  font-size: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: center;
 }
 
-
+/* Subtle help text */
 #btf-page-jumper .btf-subtle {
   opacity: 0.7;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* === Bookmarks section === */
+#btf-bookmarks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 8px;
+  min-height: 0;
+}
+#btf-bookmarks header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+#btf-bookmarks .list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  min-height: 0;
+}
+
+/* Uniform Bookmark Rows */
+#btf-bookmarks .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 6px 10px;
+  transition: background 0.15s ease;
+}
+
+#btf-bookmarks .row:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#btf-bookmarks .row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Title section expands */
+#btf-bookmarks .row a:first-child {
+  flex: 1;
+  min-width: 0;
+  color: #cfe3ff;
+  text-decoration: none;
+  font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#btf-bookmarks .row a:first-child:hover { text-decoration: underline; }
+
+/* "pg ####" tag */
+#btf-bookmarks .row span,
+#btf-bookmarks .row a[href*="pg"] {
+  color: #aaa;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Trade link */
+#btf-bookmarks .row a[href*="trade"] {
+  color: #7dc7ff;
+  font-size: 12px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+#btf-bookmarks .row a[href*="trade"]:hover {
+  text-decoration: underline;
+}
+
+/* Remove button */
+#btf-bookmarks .row .rm {
+  flex-shrink: 0;
+  padding: 3px 6px;
+  font-size: 11px;
+  opacity: 0.8;
+  border-radius: 6px;
+  text-align: center;
+}
+#btf-bookmarks .row .rm:hover {
+  opacity: 1;
+  background: #3a3e47;
+}
+
+#btf-bookmarks .muted {
+  opacity: .7;
+  font-size: 11px;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  #btf-page-jumper { right: 8px; top: 60px; }
+  #btf-control-top { flex-direction: column; gap: 4px; }
+  #btf-control-bottom { flex-wrap: wrap; }
+}
+
+/* Star buttons */
+.btf-star {
+  margin-left: 4px !important;
+  border-radius: 6px !important;
+  background: #2c2f36 !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: #ffd56a !important;
+}
+.btf-star .fa { pointer-events: none; }
+.btf-star.active {
+  background: #3a3e47 !important;
+  color: #ffe699 !important;
 }
